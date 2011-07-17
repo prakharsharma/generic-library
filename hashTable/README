@@ -1,0 +1,65 @@
+HASHTABLE
+==========
+- generic, i.e. data type independent implementation of an OPEN ADDRESSED hash
+table (uses quadratic probing by default)
+- This is just a hash table, you will have to supply your own hash function as per
+your need.
+- current implementation uses only quadratic probing to resolve collisions, but,
+	future revisions will have option of using linear/quadratic/double
+	hashing for collision resolution
+
+USAGE
+======
+encapsulate your data in the foloowing form: -
+
+struct _tableData {
+	void *data;
+	void *key; // key value, on which hash values will be computed
+};
+typedef struct _tableData tableData;
+
+i.e., allocate memory for an item of type 'tableData', then set data and key
+fields accordingly and then play with the table!
+
+FUNCTION - hashTable* getNewTable (int, hashFunc, ...)
+=======================================================
+- first argument is number of arguments is #of arguments to function. This
+weirdness is in place to support user defined methods of collision resolution,
+rather than just quadratic probing (which is default)
+- 'hashFunc' is the pointer ot hash function that the user has to supply
+- expected prototype for hash function: -
+	int hashFunc(void *key);
+
+FUCNTION - insert
+====================
+should be clear from declaration in .h
+
+FUNCTION - lookup
+====================
+- returns NULL if not found
+- cmp is the function that will be used to compare two key values, to be
+supplied by user, expected prototype and sample: -
+
+int intCompare (void *val1, void *val2)
+{
+	if (*((int *)val1) == *((int *)val2))
+		return 0;
+	if (*((int *)val1) < *((int *)val2))
+		return 1;
+	else
+		return 2;
+}
+
+FUNCTION - deleteFromTable
+==============================
+freeData is the function to be provided by the user. This will be used to free
+up the memory being used by the data being deleted from the table. Expected
+prototype will be clear from the .h
+
+BUGS
+=======
+In case any bugs are found, please report them at
+prakhar[dot]sharma[at]gmail[dot]com
+
+
+

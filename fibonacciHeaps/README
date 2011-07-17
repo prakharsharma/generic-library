@@ -1,0 +1,74 @@
+FIBONACCI HEAP - generic implementation
+======================================================
+
+USAGE
+=====
+encapsulate your data in the following form 
+struct _heapData {
+	void *data; // can be anything
+	void *key; // key is the key according to which items will be compared
+};
+typedef struct _heapData heapData;
+
+the definition should make clear that the user will have to supply items of type
+'heapData' with memory already allocated for them.
+
+INSERTION
+==========
+simple! just call the function: -
+fiboHeap* insert (fiboHeap *heap, heapData *data, int (*cmp)(heapData *, heapData *));
+
+the user has to supply the 'cmp' function which compares the key values of 2
+heapData and returns one of the following: -
+'0' if data1->key == data2->key
+'1' if data1->key < data2->key
+'2' otherwise
+
+sample cmp function for comparing integer key values: -
+
+int intCompare (heapData *data1, heapData *data2)
+{
+	void *val1 = data1->key, *val2 = data2->key;
+
+	if (*((int *)val1) == *((int *)val2))
+		return 0;
+	if (*((int *)val1) < *((int *)val2))
+		return 1;
+	else
+		return 2;
+}
+
+DELETE-MIN
+===========
+function to use:
+void deleteMin (fiboHeap *heap, void (*freeData)(heapData *), int (*cmp)(heapData *, heapData *));
+
+- cmp stands for the same as above
+- freeData is the function pointer which will free up the memory used by the item
+being deleted. Expected prototype should be clear from the above declaration of deleteMin
+
+TRAVERSE (this is not a standard function for a heap, but, just in case you
+		wonder what you have been populating??)
+====================================================================================
+- use the traverse function declared in .h file
+- the traverse function needs a function that will be used to display the data
+types. Being a generic implementation, i.e. one that worls with any data type
+(even user-defined ones) so code can not know with what kind of data type it is
+being used. So, the user has to provide a display function, example: -
+
+void intDisplay (heapData *data)
+{
+	printf("%d ", *((int *)(data->key)));
+	return;
+}
+
+Other functions and their usage will be clear by their declarations in .h and
+above documentations.
+
+If you are scared of pointers, then I strongly encourage you to give a
+atleast cursory glance to the sample usage given at the end of .c file. Though
+you can just use the library and .h!
+
+BUGS
+=======
+In case you find any bugs, please report them at prakhar.sharma@gmail.com
